@@ -64,6 +64,15 @@ gcc_warning_flags = common_warning_flags + [
 clang_warning_flags = common_warning_flags + []
 
 """
+    Other compilation flags
+"""
+
+common_compilation_flags = []
+
+gcc_compilation_flags = common_compilation_flags + []
+clang_compilation_flags = common_compilation_flags + []
+
+"""
     Debug flags
 """
 debug_flags = [
@@ -102,10 +111,15 @@ env = Environment(ENV=os.environ, CCPATH=include_dirs)
 env.Tool("compilation_db")
 env.CompilationDatabase()
 
-env_gcc_opt = env.Clone(CC="gcc", CCFLAGS=gcc_warning_flags + release_flags)
-env_gcc_dbg = env.Clone(CC="gcc", CCFLAGS=gcc_warning_flags + debug_flags)
-env_clang_opt = env.Clone(CC="clang", CCFLAGS=clang_warning_flags + release_flags)
-env_clang_dbg = env.Clone(CC="clang", CCFLAGS=clang_warning_flags + debug_flags)
+gcc_opt_flags = gcc_warning_flags + gcc_compilation_flags + release_flags
+gcc_dbg_flags = gcc_warning_flags + gcc_compilation_flags + debug_flags
+clang_opt_flags = clang_warning_flags + clang_compilation_flags + release_flags
+clang_dbg_flags = clang_warning_flags + clang_compilation_flags + debug_flags
+
+env_gcc_opt = env.Clone(CC="gcc", CCFLAGS=gcc_opt_flags)
+env_gcc_dbg = env.Clone(CC="gcc", CCFLAGS=gcc_dbg_flags)
+env_clang_opt = env.Clone(CC="clang", CCFLAGS=clang_opt_flags)
+env_clang_dbg = env.Clone(CC="clang", CCFLAGS=clang_dbg_flags)
 
 # Export environment
 # Export("env")
@@ -116,8 +130,8 @@ env_clang_dbg = env.Clone(CC="clang", CCFLAGS=clang_warning_flags + debug_flags)
 sources = Glob("*.c")
 
 # prog_gcc_opt = env_gcc_opt.Program(target="main-gcc-opt", source=sources)
-# prog_gcc_dbg = env_gcc_opt.Program(target="main-gcc-dbg", source=sources)
+# prog_gcc_dbg = env_gcc_dbg.Program(target="main-gcc-dbg", source=sources)
 # prog_clang_opt = env_clang_opt.Program(target="main-clang-opt", source=sources)
-prog_clang_dbg = env_clang_opt.Program(target="main", source=sources)
+prog_clang_dbg = env_clang_dbg.Program(target="main", source=sources)
 
 Default(prog_clang_dbg)
