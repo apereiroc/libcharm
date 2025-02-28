@@ -2,19 +2,19 @@
 
 ## Build
 
-docker build -t yalibc .
+docker build -t yalibc-dev .
 
 ## Run
 
 Compile with
 
-docker run --rm -it -v $(pwd):/src yalibc scons
+docker run --rm -it -v $(pwd):/src yalibc-dev scons
 
 Run with
 
-docker run --rm -it -v $(pwd):/src yalibc ./main
+docker run --rm -it -v $(pwd):/src yalibc-dev ./main
 
 ## Aliases
 
-alias scons="docker run --rm -it -v $(pwd):/src yalibc scons"
-alias run="docker run --rm -it -v $(pwd):/src yalibc ./main"
+alias scons="docker run --rm -it -v $(pwd):/src yalibc-dev scons"
+alias run="docker run --rm -it -v $(pwd):/src yalibc-dev ./main"
