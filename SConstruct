@@ -73,20 +73,18 @@ gcc_compilation_flags = common_compilation_flags + []
 clang_compilation_flags = common_compilation_flags + []
 
 """
-    Debug flags
+    Optimization flags
 """
 debug_flags = [
     "-O0",
     "-g",
 ]
 
-"""
-    Release_flags
-"""
+
 release_flags = [
     "-O2",
     "-g",
-    "-DNDEBUG",  # eliminates asserts?
+    # "-DNDEBUG",  # eliminates asserts?
 ]
 
 """
@@ -129,9 +127,16 @@ env_clang_dbg = env.Clone(CC="clang", CCFLAGS=clang_dbg_flags)
 
 sources = Glob("*.c")
 
-# prog_gcc_opt = env_gcc_opt.Program(target="main-gcc-opt", source=sources)
-# prog_gcc_dbg = env_gcc_dbg.Program(target="main-gcc-dbg", source=sources)
-# prog_clang_opt = env_clang_opt.Program(target="main-clang-opt", source=sources)
-prog_clang_dbg = env_clang_dbg.Program(target="main", source=sources)
+# GCC
+objs_gcc_dbg = env_gcc_dbg.Object("main-gcc-dbg", sources)
+prog_gcc_dbg = env_gcc_dbg.Program(objs_gcc_dbg)
+objs_gcc_opt = env_gcc_opt.Object("main-gcc-opt", sources)
+prog_gcc_opt = env_gcc_opt.Program(objs_gcc_opt)
 
-Default(prog_clang_dbg)
+# Clang
+objs_clang_dbg = env_clang_dbg.Object("main-clang-dbg", sources)
+prog_clang_dbg = env_clang_dbg.Program(objs_clang_dbg)
+objs_clang_opt = env_clang_opt.Object("main-clang-opt", sources)
+prog_clang_opt = env_clang_opt.Program(objs_clang_opt)
+
+# Default(prog_gcc_dbg)
