@@ -1,11 +1,11 @@
 import os
 import glob
+import sys
 
 
 """
     Warning flags
 """
-# TODO: to be checked in a docker file...
 common_warning_flags = [
     "-Wall",
     "-Wextra",
@@ -51,7 +51,6 @@ common_warning_flags = [
     "-Wshift-overflow",
 ]
 
-# TODO: to be checked in a docker file...
 gcc_warning_flags = common_warning_flags + [
     "-Wlogical-op",
     "-Wtrampolines",
@@ -65,10 +64,10 @@ gcc_warning_flags = common_warning_flags + [
 clang_warning_flags = common_warning_flags + []
 
 """
-    Other compilation flags
+    Compilation flags
 """
 
-common_compilation_flags = ["-nostdlib"]
+common_compilation_flags = []
 
 gcc_compilation_flags = common_compilation_flags + []
 clang_compilation_flags = common_compilation_flags + []
@@ -87,6 +86,15 @@ release_flags = [
     "-g",
     # "-DNDEBUG",  # eliminates asserts?
 ]
+
+"""
+    Linkflags
+"""
+
+common_linkflags = ["-nostdlib", "-ffreestanding"]
+
+gcc_linkflags = common_linkflags + []
+clang_linkflags = common_linkflags + []
 
 """
     Include dirs
@@ -115,19 +123,27 @@ gcc_dbg_flags = gcc_warning_flags + gcc_compilation_flags + debug_flags
 clang_opt_flags = clang_warning_flags + clang_compilation_flags + release_flags
 clang_dbg_flags = clang_warning_flags + clang_compilation_flags + debug_flags
 
-env_gcc_opt = env.Clone(CC="gcc", CCFLAGS=gcc_opt_flags)
-env_gcc_dbg = env.Clone(CC="gcc", CCFLAGS=gcc_dbg_flags)
-env_clang_opt = env.Clone(CC="clang", CCFLAGS=clang_opt_flags)
-env_clang_dbg = env.Clone(CC="clang", CCFLAGS=clang_dbg_flags)
+env_gcc_opt = env.Clone(
+    CC="x86_64-linux-gnu-gcc", CCFLAGS=gcc_opt_flags, LINKFLAGS=gcc_linkflags
+)
+env_gcc_dbg = env.Clone(
+    CC="x86_64-linux-gnu-gcc", CCFLAGS=gcc_dbg_flags, LINKFLAGS=gcc_linkflags
+)
+env_clang_opt = env.Clone(
+    CC="clang", CCFLAGS=clang_opt_flags, LINKFLAGS=clang_linkflags
+)
+env_clang_dbg = env.Clone(
+    CC="clang", CCFLAGS=clang_dbg_flags, LINKFLAGS=clang_linkflags
+)
 
-# Export environment
-# Export("env")
+
 """
     Build the binary/binaries
 """
 
 
-def get_objects_with_env(env_label, src_files):
+# helper function
+def _get_objects_with_env(env_label, src_files):
     list_of_objs = []
     for src_file in src_files:
         name, _ = os.path.splitext(src_file)
@@ -136,14 +152,18 @@ def get_objects_with_env(env_label, src_files):
     return list_of_objs
 
 
+# actual builder
 def build_program(env, env_label, src_files):
-    object_files = get_objects_with_env(env_label=env_label, src_files=source_files)
+    object_files = _get_objects_with_env(env_label=env_label, src_files=source_files)
     objs = [env.Object(obj, src) for obj, src in zip(object_files, src_files)]
-    prog = env_gcc_dbg.Program(f"main-{env_label}", objs)
+
+    # start_asm = env.Object(f"start-{env_label}.o", "start.s")
+    # prog = env.Program(f"main-{env_label}", start_asm + objs)
+    prog = env.Program(f"main-{env_label}", objs)
     return prog
 
 
-source_files = glob.glob("*.c")
+source_files = glob.glob("*.c") + glob.glob("*.S")
 
 # GCC debug
 prog_gcc_dbg = build_program(
@@ -165,4 +185,15 @@ prog_clang_opt = build_program(
     env=env_clang_opt, env_label="clang-opt", src_files=source_files
 )
 
-Default([prog_gcc_dbg, prog_clang_dbg])
+if sys.platform == "darwin":
+    Default(
+        [
+            prog_clang_dbg,
+        ]
+    )
+else:
+    Default(
+        [
+            prog_gcc_dbg,
+        ]
+    )
