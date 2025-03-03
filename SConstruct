@@ -19,12 +19,7 @@ common_warning_flags = [
     "-Wformat=2",
     # Disabled Warnings
     "-Wno-unknown-pragmas",  # Some compilers complain about our use of #pragma mark
-    "-Wno-c++98-compat",
-    "-Wno-c++98-compat-pedantic",
     "-Wno-padded",
-    "-Wno-exit-time-destructors",  # causes warnings if you use static values
-    "-Wno-global-constructors",  # causes warnings if you use static values
-    "-Wno-covered-switch-default",
     # Desired Warnings
     "-Wfloat-equal",
     "-Wconversion",
@@ -61,7 +56,13 @@ gcc_warning_flags = common_warning_flags + [
     "-Wcast-align=strict",
 ]
 
-clang_warning_flags = common_warning_flags + []
+clang_warning_flags = common_warning_flags + [
+    "-Wno-c++98-compat",
+    "-Wno-c++98-compat-pedantic",
+    "-Wno-covered-switch-default",
+    "-Wno-global-constructors",  # causes warnings if you use static values
+    "-Wno-exit-time-destructors",  # causes warnings if you use static values
+]
 
 """
     Compilation flags
