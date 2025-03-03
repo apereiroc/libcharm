@@ -1,1 +1,7 @@
-int main(const int argc, char **argv) { return 0; }
+#include "stdlib.h"
+#include "syscall.h"
+
+int main(void) {
+  //
+  exit(23);
+}
