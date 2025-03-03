@@ -1,4 +1,5 @@
 import os
+import glob
 
 
 """
@@ -67,7 +68,7 @@ clang_warning_flags = common_warning_flags + []
     Other compilation flags
 """
 
-common_compilation_flags = []
+common_compilation_flags = ["-nostdlib"]
 
 gcc_compilation_flags = common_compilation_flags + []
 clang_compilation_flags = common_compilation_flags + []
@@ -125,18 +126,43 @@ env_clang_dbg = env.Clone(CC="clang", CCFLAGS=clang_dbg_flags)
     Build the binary/binaries
 """
 
-sources = Glob("*.c")
 
-# GCC
-objs_gcc_dbg = env_gcc_dbg.Object("main-gcc-dbg", sources)
-prog_gcc_dbg = env_gcc_dbg.Program(objs_gcc_dbg)
-objs_gcc_opt = env_gcc_opt.Object("main-gcc-opt", sources)
-prog_gcc_opt = env_gcc_opt.Program(objs_gcc_opt)
+def get_objects_with_env(env_label, src_files):
+    list_of_objs = []
+    for src_file in src_files:
+        name, _ = os.path.splitext(src_file)
+        obj = f"{name}-{env_label}.o"
+        list_of_objs.append(obj)
+    return list_of_objs
 
-# Clang
-objs_clang_dbg = env_clang_dbg.Object("main-clang-dbg", sources)
-prog_clang_dbg = env_clang_dbg.Program(objs_clang_dbg)
-objs_clang_opt = env_clang_opt.Object("main-clang-opt", sources)
-prog_clang_opt = env_clang_opt.Program(objs_clang_opt)
 
-# Default(prog_gcc_dbg)
+def build_program(env, env_label, src_files):
+    object_files = get_objects_with_env(env_label=env_label, src_files=source_files)
+    objs = [env.Object(obj, src) for obj, src in zip(object_files, src_files)]
+    prog = env_gcc_dbg.Program(f"main-{env_label}", objs)
+    return prog
+
+
+source_files = glob.glob("*.c")
+
+# GCC debug
+prog_gcc_dbg = build_program(
+    env=env_gcc_dbg, env_label="gcc-dbg", src_files=source_files
+)
+
+# GCC release
+prog_gcc_opt = build_program(
+    env=env_gcc_opt, env_label="gcc-opt", src_files=source_files
+)
+
+# Clang debug
+prog_clang_dbg = build_program(
+    env=env_clang_dbg, env_label="clang-dbg", src_files=source_files
+)
+
+# Clang release
+prog_clang_opt = build_program(
+    env=env_clang_opt, env_label="clang-opt", src_files=source_files
+)
+
+Default([prog_gcc_dbg, prog_clang_dbg])
