@@ -2,19 +2,27 @@
 
 ## Build
 
-docker build -t yalibc-dev .
+```bash
+docker buildx build --platform linux/amd64 -t yalibc-dev .
+```
 
 ## Run
 
 Compile with
 
+```bash
 docker run --rm -it -v $(pwd):/src yalibc-dev scons
+```
 
 Run with
+```bash
+docker run --rm -it -v $(pwd):/src yalibc-dev ./main-gcc-dbg
+```
 
-docker run --rm -it -v $(pwd):/src yalibc-dev ./main
+## Aliases for quick development
 
-## Aliases
-
-alias scons="docker run --rm -it -v $(pwd):/src yalibc-dev scons"
-alias run="docker run --rm -it -v $(pwd):/src yalibc-dev ./main"
+```bash
+alias build="docker buildx build --platform linux/amd64 -t yalibc-dev ."
+alias scons="docker run --platform linux/amd64 --rm -it -v $(pwd):/src yalibc-dev scons"
+alias run="docker run --platform linux/amd64 --rm -it -v $(pwd):/src yalibc-dev"
+```
