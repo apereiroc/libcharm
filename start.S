@@ -1,5 +1,15 @@
-.global _start
-.extern _main
+#if defined(__APPLE__)
+#define STARTNAME _start
+#define MAINNAME _main
+#elif defined(__linux__)
+#define STARTNAME _start
+#define MAINNAME main
+#else
+#error Unsupported platform
+#endif
+
+.global STARTNAME
+.extern MAINNAME
 
 _start:
 #if defined(__aarch64__)
@@ -36,10 +46,12 @@ _start:
     ;xor %eax, %eax
  
     // %edi, %rsi, %rdx are the three args (of which first two are C standard) to main
-    call main
+    call MAINNAME
 
     // transfer the return of main to the first argument of _exit
     mov %eax, %edi
     movq $60, %rax
     syscall
+#else
+#error Unsupported platform
 #endif
