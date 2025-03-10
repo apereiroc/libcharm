@@ -14,25 +14,26 @@ long syscall6(long number, long arg1, long arg2, long arg3, long arg4,
               long arg5, long arg6);
 
 #ifdef __APPLE__
-#ifdef __aarch64__
-#define SYS_exit 1
-#define SYS_fork 2
-#define SYS_read 3
-#define SYS_write 4
-#define SYS_open 5
-#define SYS_close 6
-// TODO:...
-#endif // __aarch64__
-#ifdef __x86_64__
-// TODO:...
-#endif // __x86_64__
+
+#define SYS_exit 0x2000001
+// TODO:add the rest...
+
 #endif // __APPLE__
 
 #ifdef __linux__
+
 #ifdef __aarch64__
+
+#define SYS_exit 93
+// TODO:add the rest...
+
 #endif // __aarch64__
-// TODO:...
+
 #ifdef __x86_64__
-// TODO:...
+
+#define SYS_exit 60
+// TODO:add the rest...
+
 #endif // __x86_64__
+
 #endif // __linux__
