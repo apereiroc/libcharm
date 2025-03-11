@@ -16,6 +16,7 @@ long syscall6(long number, long arg1, long arg2, long arg3, long arg4,
 #ifdef __APPLE__
 
 #define SYS_exit 0x2000001
+#define SYS_write 0x2000004
 // TODO:add the rest...
 
 #endif // __APPLE__
