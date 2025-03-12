@@ -1,6 +1,7 @@
-#include "unistd.h"
+#include "stdio.h"
+#include <stddef.h>
 
 int main(void) {
-  write(1, "hello from my own libc!\n", 24);
+  puts("hello from my own libc!");
   return 0;
 }
