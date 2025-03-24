@@ -55,240 +55,165 @@ alias run="docker run --platform linux/amd64 --rm -it -v $(pwd):/src yalibc-dev"
 - [ ] add testing framework
 - [ ] provide tests for implemented functions
 
+## Assertions (`assert.h`)
+- [ ] assert macro (unimplemented)
+
 ## String handling (`string.h`)
+- [ ] `memchr` (unimplemented, untested)
+- [ ] `memcmp` (unimplemented, untested)
+- [ ] `memcpy` (unimplemented, untested)
+- [ ] `memmove` (unimplemented, untested)
+- [ ] `memset` (unimplemented, untested)
+- [ ] `strcat` (unimplemented, untested)
+- [ ] `strchr` (unimplemented, untested)
+- [ ] `strcmp` (unimplemented, untested)
+- [ ] `strcpy` (unimplemented, untested)
+- [ ] `strncat` (unimplemented, untested)
+- [ ] `strncmp` (unimplemented, untested)
+- [ ] `strncpy` (unimplemented, untested)
+- [ ] `strrchr` (unimplemented, untested)
 - [x] `strlen` (implemented, untested)
-  - [ ] test
-- [ ] `strcmp`
-  - [ ] test
-- [ ] `strncmp`
-  - [ ] test
-- [ ] `strcpy`
-  - [ ] test
-- [ ] `strncpy`
-  - [ ] test
-- [ ] `strcat`
-  - [ ] test
-- [ ] `strncat`
-  - [ ] test
-- [ ] `strchr`
-  - [ ] test
-- [ ] `strrchr`
-  - [ ] test
-- [ ] `strstr`
-  - [ ] test
-- [ ] `memcpy`
-  - [ ] test
-- [ ] `memmove`
-  - [ ] test
-- [ ] `memset`
-  - [ ] test
-- [ ] `memcmp`
-  - [ ] test
+- [ ] `strstr` (unimplemented, untested)
 
-## 2. Standard I/O (`stdio.h`)
+## Standard I/O (`stdio.h`)
+- [ ] `clearerr` (unimplemented, untested)
+- [ ] `fclose` (unimplemented, untested)
+- [ ] `fdopen` (unimplemented, untested)
+- [ ] `feof` (unimplemented, untested)
+- [ ] `ferror` (unimplemented, untested)
+- [ ] `fflush` (unimplemented, untested)
+- [ ] `fgetc` (unimplemented, untested)
+- [ ] `fgetpos` (unimplemented, untested)
+- [ ] `fgets` (unimplemented, untested)
+- [ ] `fopen` (unimplemented, untested)
+- [ ] `fprintf` (unimplemented, untested)
+- [ ] `fputc` (unimplemented, untested)
+- [ ] `fputs` (unimplemented, untested)
+- [ ] `fread` (unimplemented, untested)
+- [ ] `freopen` (unimplemented, untested)
+- [ ] `fropen` (unimplemented, untested)
+- [ ] `fscanf` (unimplemented, untested)
+- [ ] `fseek` (unimplemented, untested)
+- [ ] `fsetpos` (unimplemented, untested)
+- [ ] `ftell` (unimplemented, untested)
+- [ ] `fwrite` (unimplemented, untested)
+- [ ] `getc` (unimplemented, untested)
+- [ ] `getchar` (unimplemented, untested)
+- [ ] `gets` (unimplemented, untested)
+- [ ] `perror` (unimplemented, untested)
+- [ ] `printf` (unimplemented, untested)
+- [ ] `putc` (unimplemented, untested)
+- [ ] `putchar` (unimplemented, untested)
 - [x] `puts` (implemented, untested)
-  - [ ] test
-- [ ] `printf`
-  - [ ] test
-- [ ] `sprintf`
-  - [ ] test
-- [ ] `snprintf`
-  - [ ] test
-- [ ] `putchar`
-  - [ ] test
-- [ ] `getchar`
-  - [ ] test
-- [ ] `fopen`
-  - [ ] test
-- [ ] `fclose`
-  - [ ] test
-- [ ] `fread`
-  - [ ] test
-- [ ] `fwrite`
-  - [ ] test
-- [ ] `fprintf`
-  - [ ] test
-- [ ] `vfprintf`
-  - [ ] test
-- [ ] `fseek`
-  - [ ] test
-- [ ] `ftell`
-  - [ ] test
-- [ ] `rewind`
-  - [ ] test
-- [ ] `fgets`
-  - [ ] test
-- [ ] `fputs`
-  - [ ] test
+- [ ] `remove` (unimplemented, untested)
+- [ ] `rename` (unimplemented, untested)
+- [ ] `rewind` (unimplemented, untested)
+- [ ] `scanf` (unimplemented, untested)
+- [ ] `setbuf` (unimplemented, untested)
+- [ ] `setvbuf` (unimplemented, untested)
+- [ ] `snprintf` (unimplemented, untested)
+- [ ] `sprintf` (unimplemented, untested)
+- [ ] `sscanf` (unimplemented, untested)
+- [ ] `tmpfile` (unimplemented, untested)
+- [ ] `tmpnam` (unimplemented, untested)
+- [ ] `ungetc` (unimplemented, untested)
+- [ ] `vfprintf` (unimplemented, untested)
+- [ ] `vfscanf` (unimplemented, untested)
+- [ ] `vprintf` (unimplemented, untested)
+- [ ] `vscanf` (unimplemented, untested)
+- [ ] `vsnprintf` (unimplemented, untested)
+- [ ] `vsscanf` (unimplemented, untested)
 
-## 3. Memory Management (`stdlib.h`)
-- [ ] `malloc`
-  - [ ] test
-- [ ] `free`
-  - [ ] test
-- [ ] `calloc`
-  - [ ] test
-- [ ] `realloc`
-  - [ ] test
-- [ ] `aligned_alloc`
-  - [ ] test
-- [ ] `brk`/`sbrk` system call wrappers
-  - [ ] test
+## Memory Management (`stdlib.h`)
+- [ ] `aligned_alloc` (unimplemented, untested)
+- [ ] `brk`/`sbrk` system call wrappers (unimplemented, untested)
+- [ ] `calloc` (unimplemented, untested)
+- [ ] `free` (unimplemented, untested)
+- [ ] `malloc` (unimplemented, untested)
+- [ ] `realloc` (unimplemented, untested)
 
-## 4. Process & System Calls (`unistd.h`, `sys/types.h`)
-- [ ] `fork`
-  - [ ] test
-- [ ] `execve`
-  - [ ] test
-- [ ] `wait`
-  - [ ] test
-- [ ] `waitpid`
-  - [ ] test
+## Process & System Calls (`unistd.h`, `sys/types.h`)
+- [ ] `_exit` (unimplemented, untested)
+- [ ] `abort` (unimplemented, untested)
+- [ ] `chdir` (unimplemented, untested)
 - [x] `exit` (implemented, untested)
-  - [ ] test
-- [ ] `_exit`
-  - [ ] test
-- [ ] `abort`
-  - [ ] test
-- [ ] `getpid`
-  - [ ] test
-- [ ] `getppid`
-  - [ ] test
-- [ ] `sleep`
-  - [ ] test
-- [ ] `usleep`
-  - [ ] test
-- [ ] `nanosleep`
-  - [ ] test
-- [ ] `chdir`
-  - [ ] test
-- [ ] `getcwd`
-  - [ ] test
-- [ ] `isatty`
-  - [ ] test
-- [ ] `kill`
-  - [ ] test
-- [ ] `signal`
-  - [ ] test
+- [ ] `execve` (unimplemented, untested)
+- [ ] `fork` (unimplemented, untested)
+- [ ] `getcwd` (unimplemented, untested)
+- [ ] `getpid` (unimplemented, untested)
+- [ ] `getppid` (unimplemented, untested)
+- [ ] `isatty` (unimplemented, untested)
+- [ ] `kill` (unimplemented, untested)
+- [ ] `nanosleep` (unimplemented, untested)
+- [ ] `signal` (unimplemented, untested)
+- [ ] `sleep` (unimplemented, untested)
+- [ ] `usleep` (unimplemented, untested)
+- [ ] `wait` (unimplemented, untested)
+- [ ] `waitpid` (unimplemented, untested)
 
-## 5. File system, file descriptors (`fcntl.h`, `sys/stat.h`)
-- [ ] `open`
-  - [ ] test
-- [ ] `close`
-  - [ ] test
-- [ ] `read`
-  - [ ] test
+## File system, file descriptors (`fcntl.h`, `sys/stat.h`)
+- [ ] `chmod` (unimplemented, untested)
+- [ ] `chown` (unimplemented, untested)
+- [ ] `close` (unimplemented, untested)
+- [ ] `dup` (unimplemented, untested)
+- [ ] `dup2` (unimplemented, untested)
+- [ ] `fstat` (unimplemented, untested)
+- [ ] `lseek` (unimplemented, untested)
+- [ ] `lstat` (unimplemented, untested)
+- [ ] `mkdir` (unimplemented, untested)
+- [ ] `open` (unimplemented, untested)
+- [ ] `pipe` (unimplemented, untested)
+- [ ] `read` (unimplemented, untested)
+- [ ] `rmdir` (unimplemented, untested)
+- [ ] `stat` (unimplemented, untested)
+- [ ] `unlink` (unimplemented, untested)
 - [x] `write` (implemented, untested)
-  - [ ] test
-- [ ] `lseek`
-  - [ ] test
-- [ ] `stat`
-  - [ ] test
-- [ ] `fstat`
-  - [ ] test
-- [ ] `lstat`
-  - [ ] test
-- [ ] `chmod`
-  - [ ] test
-- [ ] `chown`
-  - [ ] test
-- [ ] `dup`
-  - [ ] test
-- [ ] `dup2`
-  - [ ] test
-- [ ] `pipe`
-  - [ ] test
-- [ ] `mkdir`
-  - [ ] test
-- [ ] `rmdir`
-  - [ ] test
-- [ ] `unlink`
-  - [ ] test
 
-## 6. Time functions (`time.h`)
-- [ ] `time`
-  - [ ] test
-- [ ] `clock`
-  - [ ] test
-- [ ] `gettimeofday`
-  - [ ] test
-- [ ] `settimeofday`
-  - [ ] test
-- [ ] `gmtime`
-  - [ ] test
-- [ ] `localtime`
-  - [ ] test
-- [ ] `mktime`
-  - [ ] test
-- [ ] `strftime`
-  - [ ] test
+## Time functions (`time.h`)
+- [ ] `clock` (unimplemented, untested)
+- [ ] `gettimeofday` (unimplemented, untested)
+- [ ] `gmtime` (unimplemented, untested)
+- [ ] `localtime` (unimplemented, untested)
+- [ ] `mktime` (unimplemented, untested)
+- [ ] `settimeofday` (unimplemented, untested)
+- [ ] `strftime` (unimplemented, untested)
+- [ ] `time` (unimplemented, untested)
 
-## 7. Math stuff (`math.h`)
-- [ ] `abs`
-  - [ ] test
-- [ ] `labs`
-  - [ ] test
-- [ ] `llabs`
-  - [ ] test
-- [ ] `pow`
-  - [ ] test
-- [ ] `sqrt`
-  - [ ] test
-- [ ] `exp`
-  - [ ] test
-- [ ] `log`
-  - [ ] test
-- [ ] `sin`
-  - [ ] test
-- [ ] `cos`
-  - [ ] test
-- [ ] `tan`
-  - [ ] test
-- [ ] `atan2`
-  - [ ] test
-- [ ] `ceil`
-  - [ ] test
-- [ ] `floor`
-  - [ ] test
-- [ ] `round`
-  - [ ] test
-- [ ] `rand`
-  - [ ] test
-- [ ] `srand`
-  - [ ] test
+## Math stuff (`math.h`)
+- [ ] `abs` (unimplemented, untested)
+- [ ] `atan2` (unimplemented, untested)
+- [ ] `ceil` (unimplemented, untested)
+- [ ] `cos` (unimplemented, untested)
+- [ ] `exp` (unimplemented, untested)
+- [ ] `floor` (unimplemented, untested)
+- [ ] `labs` (unimplemented, untested)
+- [ ] `llabs` (unimplemented, untested)
+- [ ] `log` (unimplemented, untested)
+- [ ] `pow` (unimplemented, untested)
+- [ ] `rand` (unimplemented, untested)
+- [ ] `round` (unimplemented, untested)
+- [ ] `sin` (unimplemented, untested)
+- [ ] `sqrt` (unimplemented, untested)
+- [ ] `srand` (unimplemented, untested)
+- [ ] `tan` (unimplemented, untested)
 
 ## Error handling (`errno.h`)
-- [ ] implement `errno` as a thread-local variable
-  - [ ] test
-- [ ] provide error codes (`EPERM`, `ENOMEM`, etc.)
-  - [ ] test
+- [ ] `errno` (implement as a thread-local variable) (unimplemented, untested)
+- [ ] `provide error codes` (`EPERM`, `ENOMEM`, etc.) (unimplemented, untested)
 
 ## Threading/synchronization (`pthread.h`)
-- [ ] `pthread_create`
-  - [ ] test
-- [ ] `pthread_exit`
-  - [ ] test
-- [ ] `pthread_join`
-  - [ ] test
-- [ ] `pthread_mutex_init`
-  - [ ] test
-- [ ] `pthread_mutex_lock`
-  - [ ] test
-- [ ] `pthread_mutex_unlock`
-  - [ ] test
-- [ ] `pthread_cond_wait`
-  - [ ] test
-- [ ] `pthread_cond_signal`
-  - [ ] test
+- [ ] `pthread_cond_signal` (unimplemented, untested)
+- [ ] `pthread_cond_wait` (unimplemented, untested)
+- [ ] `pthread_create` (unimplemented, untested)
+- [ ] `pthread_exit` (unimplemented, untested)
+- [ ] `pthread_join` (unimplemented, untested)
+- [ ] `pthread_mutex_init` (unimplemented, untested)
+- [ ] `pthread_mutex_lock` (unimplemented, untested)
+- [ ] `pthread_mutex_unlock` (unimplemented, untested)
 
 ## Environment (`stdlib.h`)
-- [ ] `getenv`
-  - [ ] test
-- [ ] `setenv`
-  - [ ] test
-- [ ] `unsetenv`
-  - [ ] test
-- [ ] `system`
-  - [ ] test
-- [ ] `atexit`
-  - [ ] test
+- [ ] `atexit` (unimplemented, untested)
+- [ ] `getenv` (unimplemented, untested)
+- [ ] `setenv` (unimplemented, untested)
+- [ ] `system` (unimplemented, untested)
+- [ ] `unsetenv` (unimplemented, untested)
