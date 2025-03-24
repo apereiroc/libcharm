@@ -1,8 +1,12 @@
 # Yet another implementation of the C standard library
 
+You got it right. 
+
+The OSes where this library is tested during its development are macOS with both Intel (x86_64) and M1 (arm64) chips, and Linux (through Docker containers) for both platforms as well.
+
 ## Build and run locally
 
-The project is currently only built through SCons. If you have this build system install on your computer, just run
+The project is, for now, built with SCons. If you have this build system installed in your computer, just run
 ```bash
 scons
 ```
@@ -13,7 +17,7 @@ and run the executable generated at the build folder
 ./target/{build-opts}/main
 ```
 
-`build-opts` is a folder constructed by the information passed to the construction tool, namely `{compiler}-{optimisation}-{architecture}`. For example, on macOS with Intel chip the executable is determined to be at `./clang-debug-x86_64/main`. On the other hand, optimised compilation on Linux/arm64 is at `./target/gcc-release-arm64/main`.
+where `build-opts` is a folder constructed by the information passed to the construction tool, namely `{compiler}-{optimisation}-{architecture}`. For example, on macOS with Intel chip the executable is determined to be at `./clang-debug-x86_64/main`. On the other hand, optimised compilation on Linux/arm64 is at `./target/gcc-release-arm64/main`
 
 ## Build and run in a Docker container
 
