@@ -1,3 +1,4 @@
 *.o
 *.dblite
 .cz.toml
+target/
