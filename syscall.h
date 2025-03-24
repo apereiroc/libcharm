@@ -32,6 +32,7 @@ long syscall6(long number, long arg1, long arg2, long arg3, long arg4,
 
 #ifdef __x86_64__
 
+#define SYS_write 1
 #define SYS_exit 60
 // TODO:add the rest...
 
