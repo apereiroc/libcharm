@@ -1,22 +1,40 @@
 # Yet another implementation of the C standard library
 
-## Build
+## Build and run locally
+
+The project is currently only built through SCons. If you have this build system install on your computer, just run
+```bash
+scons
+```
+
+and run the executable generated at the build folder
+
+```bash
+./target/{build-opts}/main
+```
+
+`build-opts` is a folder constructed by the information passed to the construction tool, namely `{compiler}-{optimisation}-{architecture}`. For example, on macOS with Intel chip the executable is determined to be at `./clang-debug-x86_64/main`. On the other hand, optimised compilation on Linux/arm64 is at `./target/gcc-release-arm64/main`.
+
+## Build and run in a Docker container
+
+In this example, the `x86_64` architecture will be fixed because of the output folder but feel free to use your native architecture
+
+Build the image with
 
 ```bash
 docker buildx build --platform linux/amd64 -t yalibc-dev .
 ```
 
-## Run
-
-Compile with
+Compile the library with
 
 ```bash
-docker run --rm -it -v $(pwd):/src yalibc-dev scons
+docker run --platform linux/amd64 --rm -it -v $(pwd):/src yalibc-dev scons --build=release
 ```
 
-Run with
+Run main executable with
+
 ```bash
-docker run --rm -it -v $(pwd):/src yalibc-dev ./main-gcc-dbg
+docker run --platform linux/amd64 --rm -it -v $(pwd):/src yalibc-dev ./target/gcc-release-x86_64/main
 ```
 
 ## Aliases for quick development
