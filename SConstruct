@@ -150,6 +150,7 @@ clang_linkflags = common_linkflags + []
 
 include_dirs = [
     "#",
+    "#include",
 ]
 
 """
@@ -209,7 +210,18 @@ def build_program(env, src_files):
     return prog
 
 
-source_files = glob.glob("*.c") + glob.glob("*.S")
+source_files = (
+    glob.glob(
+        "src/**/*.c",
+        recursive=True,
+    )
+    + glob.glob(
+        "src/**/*.S",
+        recursive=True,
+    )
+    + glob.glob("./*.c")
+)
+
 prog = build_program(env, source_files)
 
 Default(prog)
