@@ -2,3 +2,4 @@
 *.dblite
 .cz.toml
 target/
+compile_commands.json
