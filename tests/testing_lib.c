@@ -1,20 +1,21 @@
+#include "testing_lib.h"
 #include "syscall.h"
 
 // it is assumed that all of the functions used here work perfectly :-)
 
 // basic write
-long __write(int fd, const void *buf, long count) {
+static inline long __write(int fd, const void *buf, long count) {
   return syscall3(SYS_write, fd, (long)buf, count);
 }
 
 // basic exit
-void __exit(int status) {
+static inline void __exit(int status) {
   syscall1(SYS_exit, status);
   __builtin_unreachable();
 }
 
 // basic strlen
-long __str_len(const char *str) {
+static inline long __str_len(const char *str) {
   long len = 0;
   while (*str != '\0') {
     len++;
