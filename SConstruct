@@ -200,28 +200,20 @@ env.Tool("compilation_db")
 env.CompilationDatabase()
 
 
-# build the program
-def build_program(env, src_files):
-    objs = [
-        env.Object(os.path.join(output_dir, os.path.splitext(src)[0] + ".o"), src)
-        for src in src_files
-    ]
-    prog = env.Program(os.path.join(output_dir, "main"), objs)
-    return prog
-
-
-source_files = (
-    glob.glob(
-        "src/**/*.c",
-        recursive=True,
-    )
-    + glob.glob(
-        "src/**/*.S",
-        recursive=True,
-    )
-    + glob.glob("./*.c")
+# get source files
+source_files = glob.glob(
+    "src/**/*.c",
+    recursive=True,
+) + glob.glob(
+    "src/**/*.S",
+    recursive=True,
 )
 
-prog = build_program(env, source_files)
+# build the library
+env.Library(os.path.join(output_dir, "yalibc"), source_files)
 
-Default(prog)
+# build main
+env.Object(os.path.join(output_dir, "main.o"), "main.c")
+
+# link main with the library
+env.Program(os.path.join(output_dir, "main.o"), LIBS=["yalibc"], LIBPATH=output_dir)
