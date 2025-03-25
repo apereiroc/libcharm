@@ -243,7 +243,11 @@ env.Object(
 
 env.Library(
     os.path.join(test_output_dir, test_lib_name),
-    os.path.join(test_output_dir, "testing_lib.o"),
+    [
+        os.path.join(test_output_dir, "testing_lib.o"),
+        os.path.join(output_dir, "syscall.o"),
+        os.path.join(output_dir, "syscall_wrapper.o"),
+    ],
     CPATH=test_src_dir,
 )
 
