@@ -20,11 +20,15 @@ _start:
   add x1, sp, #8
 
   // call main
-  bl _main
+  bl MAINNAME 
   // Now x0 contains the exit status
 
   // macOS syscall number for SYS_exit
+  #if defined(__APPLE__)
   mov x16, #1
+  #elif defined(__linux__)
+  mov x8, #93
+  #endif
 
   // will exit with the value in x0, which was updated by main()
   svc #0x80
