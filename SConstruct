@@ -133,10 +133,7 @@ release_flags = [
 """
 
 # your linkflags go here
-common_linkflags = [
-    "-nostdlib",
-    "-ffreestanding",
-]
+common_linkflags = ["-nostdlib", "-ffreestanding", "-nostartfiles"]
 
 # gcc-only linkflags go here
 gcc_linkflags = common_linkflags + []
@@ -201,12 +198,16 @@ env.CompilationDatabase()
 
 
 # get source files
-source_files = glob.glob(
-    "src/**/*.c",
-    recursive=True,
-) + glob.glob(
-    "src/**/*.S",
-    recursive=True,
+source_files = (
+    glob.glob(
+        "src/**/*.c",
+        recursive=True,
+    )
+    + glob.glob(
+        "src/**/*.S",
+        recursive=True,
+    )
+    + ["start.S"]
 )
 
 # build the library
