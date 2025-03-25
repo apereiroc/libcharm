@@ -6,7 +6,7 @@ The OSes where this library is tested during its development are macOS with both
 
 ## Build and run locally
 
-The project is, for now, built with `SCons`. If you have this build system installed in your computer, just run
+The project is, for now, built with SCons. If you have this build system installed in your computer, just run
 ```bash
 scons
 ```
@@ -17,7 +17,7 @@ Run the executable generated at the build folder
 ./target/{build-opts}/main
 ```
 
-where `build-opts` is a folder constructed with the information passed to the construction tool, namely `{os}-{architecture}-{compiler}-{optimisation}`. For example, on macOS with Intel chip the executable is determined to be at `./darwin-x86_64-clang-debug/main`. On the other hand, optimised compilation on Linux/arm64 is at `./target/linux-arm64-gcc-release/main`
+where `build-opts` is a folder constructed with the information passed to the construction tool, namely `{compiler}-{optimisation}-{architecture}`. For example, on macOS with Intel chip the executable is determined to be at `./clang-debug-x86_64/main`. On the other hand, optimised compilation on Linux/arm64 is at `./target/gcc-release-arm64/main`
 
 ### Build options
 
@@ -46,7 +46,7 @@ docker run --platform linux/amd64 --rm -it -v $(pwd):/src yalibc-dev scons --bui
 Run main executable with
 
 ```bash
-docker run --platform linux/amd64 --rm -it -v $(pwd):/src yalibc-dev ./target/linux-x86_64-gcc-release/main
+docker run --platform linux/amd64 --rm -it -v $(pwd):/src yalibc-dev ./target/gcc-release-x86_64/main
 ```
 
 ## Aliases for quick development
