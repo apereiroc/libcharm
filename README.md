@@ -11,13 +11,21 @@ The project is, for now, built with SCons. If you have this build system install
 scons
 ```
 
-and run the executable generated at the build folder
 
+Run the executable generated at the build folder
 ```bash
 ./target/{build-opts}/main
 ```
 
 where `build-opts` is a folder constructed by the information passed to the construction tool, namely `{compiler}-{optimisation}-{architecture}`. For example, on macOS with Intel chip the executable is determined to be at `./clang-debug-x86_64/main`. On the other hand, optimised compilation on Linux/arm64 is at `./target/gcc-release-arm64/main`
+
+### Build options
+
+The build system accepts optimisation mode (for now only `debug` and `release` are supported, and debug is the default value) and compiler selection (for now `gcc` and `clang` are supported). The default value for the build type is `debug`, while the compiler default's is autodetected (`gcc` for Linux and `clang` for macOS).
+```bash
+scons --build=<{debug,release}> --compiler=<{gcc,clang}>
+```
+
 
 ## Build and run in a Docker container
 
