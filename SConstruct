@@ -52,6 +52,7 @@ build_type = GetOption("build")
     Warning flags
 """
 
+
 common_warning_flags = [
     "-Wall",
     "-Wextra",
@@ -80,6 +81,24 @@ common_warning_flags = [
     "-Wmissing-declarations",
     "-Wshift-overflow",
     "-Wstack-protector",
+    "-Wno-pointer-to-int-cast",
+    "-Werror=implicit-function-declaration",
+    "-Werror=implicit-int",
+    "-Werror=pointer-sign",
+    "-Werror=pointer-arith",
+    "-Werror=incompatible-pointer-types",
+    "-Waddress",
+    "-Warray-bounds",
+    "-Wchar-subscripts",
+    "-Wduplicate-decl-specifier",
+    "-Winit-self",
+    "-Wreturn-type",
+    "-Wsequence-point",
+    "-Wstrict-aliasing",
+    "-Wunused-function",
+    "-Wunused-label",
+    "-Wunused-variable",
+    "-Werror=int-conversion",
 ]
 
 gcc_warning_flags = common_warning_flags + [
@@ -90,6 +109,8 @@ gcc_warning_flags = common_warning_flags + [
     "-Wshift-overflow=2",
     "-Wduplicated-cond",
     "-Wcast-align=strict",
+    "-Werror=discarded-qualifiers",
+    "-Werror=discarded-array-qualifiers",
 ]
 
 clang_warning_flags = common_warning_flags + [
