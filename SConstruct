@@ -1,7 +1,6 @@
 import os
 import glob
 import platform
-from SCons.Script import ARGUMENTS, Environment
 from SCons.Script import Environment, AddOption, GetOption, Default
 
 
@@ -217,3 +216,48 @@ env.Object(os.path.join(output_dir, "main.o"), "main.c")
 
 # link main with the library
 env.Program(os.path.join(output_dir, "main.o"), LIBS=["yalibc"], LIBPATH=output_dir)
+
+"""
+    Build tests
+"""
+test_src_dir = "tests"
+test_output_dir = os.path.join(output_dir, "tests")
+test_lib_name = "test_yalibc"
+
+
+# build testing library
+env.Object(
+    os.path.join(test_output_dir, "testing_lib.o"),
+    os.path.join(test_src_dir, "testing_lib.c"),
+)
+
+env.Library(
+    os.path.join(test_output_dir, test_lib_name),
+    [
+        os.path.join(test_output_dir, "testing_lib.o"),
+        os.path.join(output_dir, "syscall.o"),
+        os.path.join(output_dir, "syscall_wrapper.o"),
+    ],
+    CPATH=test_src_dir,
+)
+
+
+# build tests
+test_source_files = [
+    f for f in glob.glob(f"{test_src_dir}/*.c") if "testing_lib.c" not in f
+]
+
+
+for src_file in test_source_files:
+    src_name, _ = os.path.splitext(os.path.basename(src_file))
+    obj_name = os.path.join(test_output_dir, src_name + ".o")
+    bin_name = os.path.join(test_output_dir, src_name)
+
+    env.Object(obj_name, src_file)
+
+    env.Program(
+        bin_name,
+        obj_name,
+        LIBS=["yalibc", test_lib_name],
+        LIBPATH=[output_dir, test_output_dir],
+    )
