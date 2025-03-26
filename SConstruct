@@ -1,7 +1,7 @@
 import os
 import glob
 import platform
-from SCons.Script import Environment, AddOption, GetOption
+from SCons.Script import Environment, AddOption, GetOption, Default
 
 
 # check whether system is Linux/Darwin
@@ -132,7 +132,10 @@ release_flags = [
 """
 
 # your linkflags go here
-common_linkflags = ["-nostdlib", "-ffreestanding", "-nostartfiles"]
+common_linkflags = [
+    "-nostdlib",
+    "-ffreestanding",
+]
 
 # gcc-only linkflags go here
 gcc_linkflags = common_linkflags + []
@@ -181,7 +184,7 @@ else:
     exit(1)
 
 # determine output directory
-output_dir = f"target/{system_name.lower()}-{arch_name}-{compiler}-{build_type}"
+output_dir = f"target/{compiler}-{build_type}-{arch_name}"
 os.makedirs(output_dir, exist_ok=True)
 
 # create the build environment
@@ -197,29 +200,16 @@ env.CompilationDatabase()
 
 
 # get source files
-source_files = (
-    glob.glob(
-        "src/**/*.c",
-        recursive=True,
-    )
-    + glob.glob(
-        "src/**/*.S",
-        recursive=True,
-    )
-    + ["start.S"]
+source_files = glob.glob(
+    "src/**/*.c",
+    recursive=True,
+) + glob.glob(
+    "src/**/*.S",
+    recursive=True,
 )
 
 # build the library
-obj_files = []
-for src_file in source_files:
-    src_name, src_ext = os.path.splitext(os.path.basename(src_file))
-    obj_name = os.path.join(output_dir, src_name + ".o")
-    bin_name = os.path.join(output_dir, src_name)
-
-    env.Object(obj_name, src_file)
-    obj_files.append(obj_name)
-
-env.Library(os.path.join(output_dir, "yalibc"), obj_files)
+env.Library(os.path.join(output_dir, "yalibc"), source_files)
 
 # build main
 env.Object(os.path.join(output_dir, "main.o"), "main.c")
