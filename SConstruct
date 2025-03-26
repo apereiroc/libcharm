@@ -252,14 +252,19 @@ env.Program(os.path.join(output_dir, "main.o"), LIBS=["yalibc"], LIBPATH=output_
     Build tests
 """
 test_src_dir = "tests"
+test_lib_dir = os.path.join(test_src_dir, "lib")
+test_lib_src_dir = os.path.join(test_lib_dir, "src")
+test_lib_inc_dir = os.path.join(test_lib_dir, "include")
 test_output_dir = os.path.join(output_dir, "tests")
 test_lib_name = "test_yalibc"
 
 
 # build object files of testing library
+env.AppendUnique(CPPPATH=[test_lib_inc_dir])
+
 env.Object(
     os.path.join(test_output_dir, "testing_lib.o"),
-    os.path.join(test_src_dir, "testing_lib.c"),
+    os.path.join(test_lib_src_dir, "testing_lib.c"),
 )
 
 # create a testing library from the objects
@@ -271,16 +276,12 @@ env.Library(
         os.path.join(output_dir, "syscall.o"),
         os.path.join(output_dir, "syscall_wrapper.o"),
     ],
-    CPATH=test_src_dir,
 )
 
 
 # get test source files
 # exclude the testing library
-test_source_files = [
-    f for f in glob.glob(f"{test_src_dir}/*.c") if "testing_lib.c" not in f
-]
-
+test_source_files = [f for f in glob.glob(f"{test_src_dir}/*.c")]
 
 # for each testing source file, create an executable at test output directory
 for src_file in test_source_files:
