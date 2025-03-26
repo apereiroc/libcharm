@@ -51,33 +51,36 @@ void print_success(void) { __write(1, "All tests passed\n", 17); }
 
 void __report_error(const char *file, int line, const char *msg) {
   // buffer to be sent to stderr
+  // are 256 bytes enough?
+  // can eventually add checks against buf_idx...
   char buf[256];
+
   // 12 bytes should be enough for 32-bit integers
   char line_num_buf[12];
 
   // convert line number into a null-terminated string
   __itoa(line, line_num_buf);
 
-  long i = 0;
+  long buf_idx = 0;
   // copy file into output buffer
   while (*file)
-    buf[i++] = *file++;
-  buf[i++] = ':';
+    buf[buf_idx++] = *file++;
+  buf[buf_idx++] = ':';
 
   // copy line number where error occurred
   const char *lptr = line_num_buf;
   while (*lptr)
-    buf[i++] = *lptr++;
-  buf[i++] = ':';
-  buf[i++] = ' ';
+    buf[buf_idx++] = *lptr++;
+  buf[buf_idx++] = ':';
+  buf[buf_idx++] = ' ';
 
   // copy error message
   while (*msg)
-    buf[i++] = *msg++;
-  buf[i++] = '\n';
+    buf[buf_idx++] = *msg++;
+  buf[buf_idx++] = '\n';
 
   // write buffer to stderr
-  __write(2, buf, i);
+  __write(2, buf, buf_idx);
 
   // exit with code 1
   __exit(1);

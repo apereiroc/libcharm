@@ -60,7 +60,7 @@ alias run="docker run --platform linux/amd64 --rm -it -v $(pwd):/src yalibc-dev"
 # TODO List
 
 ## Testing
-- [ ] add testing framework
+- [ x ] add testing framework
 - [ ] provide tests for implemented functions
 
 ## Assertions (`assert.h`)
