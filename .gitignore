@@ -1,5 +1,5 @@
-*.o
 *.dblite
 .cz.toml
 target/
+.cache/
 compile_commands.json

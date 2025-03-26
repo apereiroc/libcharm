@@ -1,7 +1,7 @@
 import os
 import glob
 import platform
-from SCons.Script import Environment, AddOption, GetOption, Default
+from SCons.Script import Environment, AddOption, GetOption
 
 
 # check whether system is Linux/Darwin
@@ -106,6 +106,9 @@ clang_warning_flags = common_warning_flags + [
 # your compilation flags go here
 common_compilation_flags = [
     "-std=c99",
+    # for now avoid stack protection against overflow
+    # TODO: eventually implement __stack_chk_fail, ___stack_chk_guard
+    "-fno-stack-protector",
 ]
 
 # gcc-only compilation flags go here
@@ -135,6 +138,7 @@ release_flags = [
 common_linkflags = [
     "-nostdlib",
     "-ffreestanding",
+    "-nostartfiles",
 ]
 
 # gcc-only linkflags go here
@@ -184,7 +188,7 @@ else:
     exit(1)
 
 # determine output directory
-output_dir = f"target/{compiler}-{build_type}-{arch_name}"
+output_dir = f"target/{system_name.lower()}-{arch_name}-{compiler}-{build_type}"
 os.makedirs(output_dir, exist_ok=True)
 
 # create the build environment
@@ -200,21 +204,35 @@ env.CompilationDatabase()
 
 
 # get source files
-source_files = glob.glob(
-    "src/**/*.c",
-    recursive=True,
-) + glob.glob(
-    "src/**/*.S",
-    recursive=True,
+source_files = (
+    glob.glob(
+        "src/**/*.c",
+        recursive=True,
+    )
+    + glob.glob(
+        "src/**/*.S",
+        recursive=True,
+    )
+    + ["start.S"]
 )
 
-# build the library
-env.Library(os.path.join(output_dir, "yalibc"), source_files)
+# create object files at output directory
+obj_files = []
+for src_file in source_files:
+    src_name, src_ext = os.path.splitext(os.path.basename(src_file))
+    obj_name = os.path.join(output_dir, src_name + ".o")
+    bin_name = os.path.join(output_dir, src_name)
 
-# build main
+    env.Object(obj_name, src_file)
+    obj_files.append(obj_name)
+
+# create the library at output directory from object files
+env.Library(os.path.join(output_dir, "yalibc"), obj_files)
+
+# build main at output directory
 env.Object(os.path.join(output_dir, "main.o"), "main.c")
 
-# link main with the library
+# link main against the library
 env.Program(os.path.join(output_dir, "main.o"), LIBS=["yalibc"], LIBPATH=output_dir)
 
 """
@@ -225,12 +243,14 @@ test_output_dir = os.path.join(output_dir, "tests")
 test_lib_name = "test_yalibc"
 
 
-# build testing library
+# build object files of testing library
 env.Object(
     os.path.join(test_output_dir, "testing_lib.o"),
     os.path.join(test_src_dir, "testing_lib.c"),
 )
 
+# create a testing library from the objects
+# and also link syscall (needed for write and exit in the testing framework)
 env.Library(
     os.path.join(test_output_dir, test_lib_name),
     [
@@ -242,12 +262,14 @@ env.Library(
 )
 
 
-# build tests
+# get test source files
+# exclude the testing library
 test_source_files = [
     f for f in glob.glob(f"{test_src_dir}/*.c") if "testing_lib.c" not in f
 ]
 
 
+# for each testing source file, create an executable at test output directory
 for src_file in test_source_files:
     src_name, _ = os.path.splitext(os.path.basename(src_file))
     obj_name = os.path.join(test_output_dir, src_name + ".o")
