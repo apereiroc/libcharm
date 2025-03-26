@@ -80,7 +80,7 @@ alias run="docker run --platform linux/amd64 --rm -it -v $(pwd):/src yalibc-dev"
 - [ ] `strncmp` (unimplemented, untested)
 - [ ] `strncpy` (unimplemented, untested)
 - [ ] `strrchr` (unimplemented, untested)
-- [x] `strlen` (implemented, untested)
+- [x] `strlen` (implemented, tested)
 - [ ] `strstr` (unimplemented, untested)
 
 ## Standard I/O (`stdio.h`)
@@ -139,12 +139,12 @@ alias run="docker run --platform linux/amd64 --rm -it -v $(pwd):/src yalibc-dev"
 - [ ] `free` (unimplemented, untested)
 - [ ] `malloc` (unimplemented, untested)
 - [ ] `realloc` (unimplemented, untested)
+- [ ] `exit` (implemented, untested)
 
 ## Process & System Calls (`unistd.h`, `sys/types.h`)
-- [ ] `_exit` (unimplemented, untested)
+- [ x ] `_exit` (implemented, untested)
 - [ ] `abort` (unimplemented, untested)
 - [ ] `chdir` (unimplemented, untested)
-- [x] `exit` (implemented, untested)
 - [ ] `execve` (unimplemented, untested)
 - [ ] `fork` (unimplemented, untested)
 - [ ] `getcwd` (unimplemented, untested)
