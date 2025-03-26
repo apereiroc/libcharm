@@ -79,6 +79,7 @@ common_warning_flags = [
     "-Winvalid-pch",
     "-Wmissing-declarations",
     "-Wshift-overflow",
+    "-Wstack-protector",
 ]
 
 gcc_warning_flags = common_warning_flags + [
@@ -109,13 +110,20 @@ common_compilation_flags = [
     # for now avoid stack protection against overflow
     # TODO: eventually implement __stack_chk_fail, ___stack_chk_guard
     "-fno-stack-protector",
+    "-nostdlib",
+    "-ffreestanding",
+    # "-nostartfiles",
+    "-nostdinc",
 ]
 
 # gcc-only compilation flags go here
 gcc_compilation_flags = common_compilation_flags + []
 
 # clang-only compilation flags go here
-clang_compilation_flags = common_compilation_flags + []
+clang_compilation_flags = common_compilation_flags + [
+    "-nobuiltininc",
+    "-nostdlibinc",
+]
 
 """
     Optimisation flags for debug/release
@@ -139,13 +147,18 @@ common_linkflags = [
     "-nostdlib",
     "-ffreestanding",
     "-nostartfiles",
+    "-nostdinc",
+    "-nodefaultlibs",
 ]
 
 # gcc-only linkflags go here
 gcc_linkflags = common_linkflags + []
 
 # clang-only linkflags go here
-clang_linkflags = common_linkflags + []
+clang_linkflags = common_linkflags + [
+    "-nostdlibinc",
+    "-nobuiltininc",
+]
 
 """
     Include dirs
