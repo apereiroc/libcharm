@@ -2,19 +2,20 @@
 
 Indeed, `charm` is yet another implementation of the C standard library.
 
-The OSes where this library is tested during its development are macOS with both Intel (`x86_64`) and M1 (`arm64`) chips, and Linux (through Docker containers) for both platforms as well.
+The OSes where this library is tested during its development are macOS with both Intel and M1 chips, and Linux (through Docker containers).
 
-Therefore, only macOS/Linux with x86_64/arm64 architectures are currently supported.
+Therefore, only macOS/Linux under `x86_64` and `arm64` architectures are currently supported.
 
 ## Build and run locally
 
 The project is, for now, built with `SCons`. If you have this build system installed in your computer, just run
+
 ```bash
 scons
 ```
 
-
 Run the executable generated at the build folder
+
 ```bash
 ./target/{build-opts}/main
 ```
@@ -24,10 +25,10 @@ where `build-opts` is a folder constructed with the information passed to the co
 ### Build options
 
 The build system accepts optimisation mode (only `debug` and `release` are supported) and compiler selection (only `gcc` and `clang` are supported). The default for the build type is `debug`, while the compiler default is autodetected (`gcc` for Linux and `clang` for macOS).
+
 ```bash
 scons --build=<{debug,release}> --compiler=<{gcc,clang}>
 ```
-
 
 ## Build and run in a Docker container
 
