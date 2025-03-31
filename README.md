@@ -1,8 +1,10 @@
-# Yet another implementation of the C standard library
+# Charm libc
 
-You got it right. 
+Indeed, `charm` is yet another implementation of the C standard library.
 
-The OSes where this library is tested during its development are macOS with both Intel (x86_64) and M1 (arm64) chips, and Linux (through Docker containers) for both platforms as well.
+The OSes where this library is tested during its development are macOS with both Intel (`x86_64`) and M1 (`arm64`) chips, and Linux (through Docker containers) for both platforms as well.
+
+Therefore, only macOS/Linux with x86_64/arm64 architectures are currently supported.
 
 ## Build and run locally
 
@@ -34,27 +36,27 @@ In this example, the `x86_64` architecture will be fixed because of the output f
 Build the image with
 
 ```bash
-docker buildx build --platform linux/amd64 -t yalibc-dev .
+docker buildx build --platform linux/amd64 -t libcharm-dev .
 ```
 
 Compile the library with
 
 ```bash
-docker run --platform linux/amd64 --rm -it -v $(pwd):/src yalibc-dev scons --build=release
+docker run --platform linux/amd64 --rm -it -v $(pwd):/src libcharm-dev scons --build=release
 ```
 
 Run main executable with
 
 ```bash
-docker run --platform linux/amd64 --rm -it -v $(pwd):/src yalibc-dev ./target/linux-x86_64-gcc-release/main
+docker run --platform linux/amd64 --rm -it -v $(pwd):/src libcharm-dev ./target/linux-x86_64-gcc-release/main
 ```
 
 ## Aliases for quick development
 
 ```bash
-alias build="docker buildx build --platform linux/amd64 -t yalibc-dev ."
-alias scons="docker run --platform linux/amd64 --rm -it -v $(pwd):/src yalibc-dev scons"
-alias run="docker run --platform linux/amd64 --rm -it -v $(pwd):/src yalibc-dev"
+alias build="docker buildx build --platform linux/amd64 -t libcharm-dev ."
+alias scons="docker run --platform linux/amd64 --rm -it -v $(pwd):/src libcharm-dev scons"
+alias run="docker run --platform linux/amd64 --rm -it -v $(pwd):/src libcharm-dev"
 ```
 
 # TODO List

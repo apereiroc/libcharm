@@ -261,13 +261,13 @@ for src_file in source_files:
     obj_files.append(obj_name)
 
 # create the library at output directory from object files
-env.Library(os.path.join(output_dir, "yalibc"), obj_files)
+env.Library(os.path.join(output_dir, "charm"), obj_files)
 
 # build main at output directory
 env.Object(os.path.join(output_dir, "main.o"), "main.c")
 
 # link main against the library
-env.Program(os.path.join(output_dir, "main.o"), LIBS=["yalibc"], LIBPATH=output_dir)
+env.Program(os.path.join(output_dir, "main.o"), LIBS=["charm"], LIBPATH=output_dir)
 
 """
     Build tests
@@ -277,7 +277,7 @@ test_lib_dir = os.path.join(test_src_dir, "lib")
 test_lib_src_dir = os.path.join(test_lib_dir, "src")
 test_lib_inc_dir = os.path.join(test_lib_dir, "include")
 test_output_dir = os.path.join(output_dir, "tests")
-test_lib_name = "test_yalibc"
+test_lib_name = "test_libcharm"
 
 
 # build object files of testing library
@@ -315,6 +315,6 @@ for src_file in test_source_files:
     env.Program(
         bin_name,
         obj_name,
-        LIBS=["yalibc", test_lib_name],
+        LIBS=["charm", test_lib_name],
         LIBPATH=[output_dir, test_output_dir],
     )
