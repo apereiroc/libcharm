@@ -32,24 +32,29 @@ scons --build=<{debug,release}> --compiler=<{gcc,clang}>
 
 ## Build and run in a Docker container
 
-In this example, the `x86_64` architecture will be fixed because of the output folder but feel free to use your native architecture
+Get arch
+
+```bash
+arch=$(uname -m)
+```
+
 
 Build the image with
 
 ```bash
-docker buildx build --platform linux/amd64 -t libcharm-dev .
+docker buildx build -t libcharm-dev .
 ```
 
 Compile the library with
 
 ```bash
-docker run --platform linux/amd64 --rm -it -v $(pwd):/src libcharm-dev scons --build=release
+docker run --rm -it -v $(pwd):/src libcharm-dev scons --build=release
 ```
 
-Run main executable with
+Run the main executable with
 
 ```bash
-docker run --platform linux/amd64 --rm -it -v $(pwd):/src libcharm-dev ./target/linux-x86_64-gcc-release/main
+docker run --rm -it -v $(pwd):/src libcharm-dev ./target/linux-${arch}-gcc-release/main
 ```
 
 ## Aliases for quick development
