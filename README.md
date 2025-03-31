@@ -32,13 +32,6 @@ scons --build=<{debug,release}> --compiler=<{gcc,clang}>
 
 ## Build and run in a Docker container
 
-Get arch
-
-```bash
-arch=$(uname -m)
-```
-
-
 Build the image with
 
 ```bash
@@ -54,7 +47,7 @@ docker run --rm -it -v $(pwd):/src libcharm-dev scons --build=release
 Run the main executable with
 
 ```bash
-docker run --rm -it -v $(pwd):/src libcharm-dev ./target/linux-${arch}-gcc-release/main
+docker run --rm -it -v $(pwd):/src libcharm-dev ./target/linux-$(uname -m)-gcc-release/main
 ```
 
 ## Aliases for quick development
