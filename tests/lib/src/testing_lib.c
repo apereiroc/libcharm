@@ -142,7 +142,7 @@ void __log_running_test_function(const char *func_name) {
   // write to stdout
   __write(1, buf, __strlen(buf));
   __write(1, func_name, __strlen(func_name));
-  __write(1, "`: ... ", 6);
+  __write(1, "`: ... ", 7);
 }
 
 void __test_ok(void) {
