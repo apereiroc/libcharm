@@ -17,8 +17,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # - name: Set up QEMU
-      #   uses: docker/setup-qemu-action@v2
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
@@ -26,28 +26,18 @@ jobs:
       - name: Build Docker container for ${{ matrix.arch }}
         run: |
           docker buildx create --use
-          # docker buildx build --platform=${{ matrix.arch }} -f Dockerfile.ci -t libcharm-ci --load .
-          docker buildx build -f Dockerfile.ci -t libcharm-ci --load .
+          docker buildx build --platform=${{ matrix.arch }} -f Dockerfile.ci -t libcharm-ci --load .
 
       - name: Build libcharm 
         run: |
-          # docker run --rm --platform=${{ matrix.arch }} -t libcharm-ci sh -c 'scons --build=debug --compiler=gcc'
-          # docker run --rm --platform=${{ matrix.arch }} -t libcharm-ci sh -c 'scons --build=release --compiler=gcc'
-          # docker run --rm --platform=${{ matrix.arch }} -t libcharm-ci sh -c 'scons --build=debug --compiler=clang'
-          # docker run --rm --platform=${{ matrix.arch }} -t libcharm-ci sh -c 'scons --build=release --compiler=clang'
-          docker run --rm -t libcharm-ci scons --build=debug --compiler=gcc
-          docker run --rm -t libcharm-ci scons --build=release --compiler=gcc
-          docker run --rm -t libcharm-ci scons --build=debug --compiler=clang
-          docker run --rm -t libcharm-ci scons --build=release --compiler=clang
+          docker run --rm --platform=${{ matrix.arch }} -t libcharm-ci sh -c 'scons --build=debug --compiler=gcc'
+          docker run --rm --platform=${{ matrix.arch }} -t libcharm-ci sh -c 'scons --build=release --compiler=gcc'
+          docker run --rm --platform=${{ matrix.arch }} -t libcharm-ci sh -c 'scons --build=debug --compiler=clang'
+          docker run --rm --platform=${{ matrix.arch }} -t libcharm-ci sh -c 'scons --build=release --compiler=clang'
 
       - name: Run libcharm tests
         run: |
-          # docker run --rm --platform=${{ matrix.arch }} -t libcharm-ci sh -c 'scons test --build=debug --compiler=gcc'
-          # docker run --rm --platform=${{ matrix.arch }} -t libcharm-ci sh -c 'scons test --build=release --compiler=gcc'
-          # docker run --rm --platform=${{ matrix.arch }} -t libcharm-ci sh -c 'scons test --build=debug --compiler=clang'
-          # docker run --rm --platform=${{ matrix.arch }} -t libcharm-ci sh -c 'scons test --build=release --compiler=clang'
-          docker run --rm -t libcharm-ci scons test --build=debug --compiler=gcc
-          docker run --rm -t libcharm-ci scons test --build=release --compiler=gcc
-          docker run --rm -t libcharm-ci scons test --build=debug --compiler=clang
-          docker run --rm -t libcharm-ci scons test --build=release --compiler=clang
-
+          docker run --rm --platform=${{ matrix.arch }} -t libcharm-ci sh -c 'scons test --build=debug --compiler=gcc'
+          docker run --rm --platform=${{ matrix.arch }} -t libcharm-ci sh -c 'scons test --build=release --compiler=gcc'
+          docker run --rm --platform=${{ matrix.arch }} -t libcharm-ci sh -c 'scons test --build=debug --compiler=clang'
+          docker run --rm --platform=${{ matrix.arch }} -t libcharm-ci sh -c 'scons test --build=release --compiler=clang'
