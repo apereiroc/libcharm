@@ -271,6 +271,26 @@ env.Object(os.path.join(output_dir, "main.o"), "main.c")
 # link main against the library
 env.Program(os.path.join(output_dir, "main.o"), LIBS=["charm"], LIBPATH=output_dir)
 
+
+# add a 'run' target that runs all test binaries
+def run_main(target, source, env):
+    bin = os.path.join(output_dir, "main")
+    ret = os.system(bin)
+    if ret != 0:
+        actual_ret = os.waitstatus_to_exitcode(ret)
+        print(f"error: `main` exit with error code {actual_ret}")
+        return 1
+    return ret
+
+
+# create a main target
+# can be called by running `scons run`
+main_target = env.Alias("run", os.path.join(output_dir, "main"), run_main)
+
+# always build this target
+# otherwise it will say that it is already built
+env.AlwaysBuild(main_target)
+
 """
     Build tests
 """
