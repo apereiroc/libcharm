@@ -41,19 +41,19 @@ docker buildx build -f Dockerfile.ci -t libcharm .
 Compile the library with
 
 ```bash
-docker run --rm -it -v $(pwd):/src libcharm scons --build=release
+docker run --rm -it -v $(pwd):/src -t libcharm scons --build=release
 ```
 
 Run the main executable with
 
 ```bash
-docker run --rm -it -v $(pwd):/src libcharm sh -c './target/linux-$(uname -m)-gcc-release/main'
+docker run --rm -it -v $(pwd):/src -t libcharm sh -c './target/linux-$(uname -m)-gcc-release/main'
 ```
 
 Run the tests with
 
 ```bash
-docker run --rm -it -v $(pwd):/src libcharm sh -c './target/linux-$(uname -m)-gcc-release/main'
+docker run --rm -it -v $(pwd):/src -t libcharm scons test
 ```
 
 ## Aliases for quick development
