@@ -51,10 +51,9 @@ _start:
   // call main
   call main
 
-  // the return function of main is in rax
+  // the return value of main is in rax
   // move it to rdi to make the system call
-  ;mov %eax, %edi
-  mov $3, %edi
+  mov %eax, %edi
 
   // move system call number 60 (exit) to rax
   mov $60, %eax
