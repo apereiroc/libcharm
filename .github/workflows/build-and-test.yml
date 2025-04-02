@@ -1,0 +1,39 @@
+name: Build and Test libcharm
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # architectures to test
+        arch: [linux/amd64, linux/arm64]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build Docker container for ${{ matrix.arch }}
+        run: |
+          docker buildx create --use
+          docker buildx build --platform=${{ matrix.arch }} -t libcharm-dev --load .
+
+      - name: Build libcharm with SCons
+        run: docker run --rm --platform=${{ matrix.arch }} -t libcharm-dev scons
+
+      - name: Run libcharm tests
+        run: docker run --rm --platform=${{ matrix.arch }} -t libcharm-dev scons test
+
