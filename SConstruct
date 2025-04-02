@@ -170,6 +170,7 @@ common_linkflags = [
     "-nostartfiles",
     "-nostdinc",
     "-nodefaultlibs",
+    "-Wl,-e,_start",
 ]
 
 # gcc-only linkflags go here
@@ -247,7 +248,8 @@ source_files = (
         "src/**/*.S",
         recursive=True,
     )
-    + ["start.S"]
+    # + ["start.S"]
+    + [f"crt/{system_name}/{arch_name}/crt0.S"]
 )
 
 # create object files at output directory
