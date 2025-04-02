@@ -32,8 +32,8 @@ jobs:
           docker buildx build --platform=${{ matrix.arch }} -t libcharm-dev --load .
 
       - name: Build libcharm with SCons
-        run: docker run --rm --platform=${{ matrix.arch }} -t my-libc scons
+        run: docker run --rm --platform=${{ matrix.arch }} -t libcharm-dev scons
 
       - name: Run libcharm tests
-        run: docker run --rm --platform=${{ matrix.arch }} -t my-libc scons test
+        run: docker run --rm --platform=${{ matrix.arch }} -t libcharm-dev scons test
 
