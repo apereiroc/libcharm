@@ -1,0 +1,28 @@
+FROM ubuntu:22.04
+
+# this dockerfile is intended for development
+
+RUN yes | unminimize
+
+# install required dev tools
+RUN apt update && apt install -y \
+  # for compiling and running tests
+  clang \
+  gcc \
+  scons \
+  # ausyscall --dump shows syscall numbers
+  auditd \
+  # linux/posix programmer manuals
+  man-db \
+  manpages \
+  manpages-dev \
+  manpages-posix \
+  manpages-posix-dev \
+  # just for vim commands in man-db
+  less
+
+# copy the source code
+COPY . /src
+
+# change working directory
+WORKDIR /src

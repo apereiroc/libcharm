@@ -32,28 +32,34 @@ scons --build=<{debug,release}> --compiler=<{gcc,clang}>
 
 ## Build and run in a Docker container
 
-Build the image with
+Build the ci image (minimal) with
 
 ```bash
-docker buildx build -t libcharm-dev .
+docker buildx build -f Dockerfile.ci -t libcharm .
 ```
 
 Compile the library with
 
 ```bash
-docker run --rm -it -v $(pwd):/src libcharm-dev scons --build=release
+docker run --rm -it -v $(pwd):/src -t libcharm scons --build=release
 ```
 
 Run the main executable with
 
 ```bash
-docker run --rm -it -v $(pwd):/src libcharm-dev sh -c './target/linux-$(uname -m)-gcc-release/main'
+docker run --rm -it -v $(pwd):/src -t libcharm sh -c './target/linux-$(uname -m)-gcc-release/main'
+```
+
+Run the tests with
+
+```bash
+docker run --rm -it -v $(pwd):/src -t libcharm scons test
 ```
 
 ## Aliases for quick development
 
 ```bash
-alias build="docker buildx build --platform linux/amd64 -t libcharm-dev ."
+alias dbuild="docker buildx build --platform linux/amd64 -f Dockerfile.ci -t libcharm-dev ."
 alias scons="docker run --platform linux/amd64 --rm -it -v $(pwd):/src libcharm-dev scons"
 alias run="docker run --platform linux/amd64 --rm -it -v $(pwd):/src libcharm-dev"
 ```
@@ -303,35 +309,36 @@ alias run="docker run --platform linux/amd64 --rm -it -v $(pwd):/src libcharm-de
 - [ ] `test: size no greater than long`  (untested)
 
 ## Fixed width integers (`stdint.h`)
-- [ ] `test: check size at compile time or test run time` (undone)
-- [ ] `int8_t` (undefined)
-- [ ] `int16_t` (undefined)
-- [ ] `int32_t` (undefined)
-- [ ] `int64_t` (undefined)
-- [ ] `uint8_t` (undefined)
-- [ ] `uint16_t` (undefined)
-- [ ] `uint32_t` (undefined)
-- [ ] `uint64_t` (undefined)
-- [ ] `int_least8_t` (undefined)
-- [ ] `int_least16_t` (undefined)
-- [ ] `int_least32_t` (undefined)
-- [ ] `int_least64_t` (undefined)
-- [ ] `uint_least8_t` (undefined)
-- [ ] `uint_least16_t` (undefined)
-- [ ] `uint_least32_t` (undefined)
-- [ ] `uint_least64_t` (undefined)
-- [ ] `int_fast8_t` (undefined)
-- [ ] `int_fast16_t` (undefined)
-- [ ] `int_fast32_t` (undefined)
-- [ ] `int_fast64_t` (undefined)
-- [ ] `uint_fast8_t` (undefined)
-- [ ] `uint_fast16_t` (undefined)
-- [ ] `uint_fast32_t` (undefined)
-- [ ] `uint_fast64_t` (undefined)
-- [ ] `intptr_t` (undefined)
-- [ ] `uintptr_t` (undefined)
-- [ ] `intmax_t` (undefined)
-- [ ] `uintmax_t` (undefined)
+- [ ] `test: check size at compile time` (undone)
+- [x] `test: check size at runtime` (done)
+- [x] `int8_t` (undefined)
+- [x] `int16_t` (undefined)
+- [x] `int32_t` (undefined)
+- [x] `int64_t` (undefined)
+- [x] `uint8_t` (undefined)
+- [x] `uint16_t` (undefined)
+- [x] `uint32_t` (undefined)
+- [x] `uint64_t` (undefined)
+- [x] `int_least8_t` (undefined)
+- [x] `int_least16_t` (undefined)
+- [x] `int_least32_t` (undefined)
+- [x] `int_least64_t` (undefined)
+- [x] `uint_least8_t` (undefined)
+- [x] `uint_least16_t` (undefined)
+- [x] `uint_least32_t` (undefined)
+- [x] `uint_least64_t` (undefined)
+- [x] `int_fast8_t` (undefined)
+- [x] `int_fast16_t` (undefined)
+- [x] `int_fast32_t` (undefined)
+- [x] `int_fast64_t` (undefined)
+- [x] `uint_fast8_t` (undefined)
+- [x] `uint_fast16_t` (undefined)
+- [x] `uint_fast32_t` (undefined)
+- [x] `uint_fast64_t` (undefined)
+- [x] `intptr_t` (undefined)
+- [x] `uintptr_t` (undefined)
+- [x] `intmax_t` (undefined)
+- [x] `uintmax_t` (undefined)
 - ... more todos
 
 ## Standard I/O (`stdio.h`)
