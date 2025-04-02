@@ -32,28 +32,34 @@ scons --build=<{debug,release}> --compiler=<{gcc,clang}>
 
 ## Build and run in a Docker container
 
-Build the image with
+Build the ci image (minimal) with
 
 ```bash
-docker buildx build -t libcharm-dev .
+docker buildx build -f Dockerfile.ci -t libcharm .
 ```
 
 Compile the library with
 
 ```bash
-docker run --rm -it -v $(pwd):/src libcharm-dev scons --build=release
+docker run --rm -it -v $(pwd):/src libcharm scons --build=release
 ```
 
 Run the main executable with
 
 ```bash
-docker run --rm -it -v $(pwd):/src libcharm-dev sh -c './target/linux-$(uname -m)-gcc-release/main'
+docker run --rm -it -v $(pwd):/src libcharm sh -c './target/linux-$(uname -m)-gcc-release/main'
+```
+
+Run the tests with
+
+```bash
+docker run --rm -it -v $(pwd):/src libcharm sh -c './target/linux-$(uname -m)-gcc-release/main'
 ```
 
 ## Aliases for quick development
 
 ```bash
-alias build="docker buildx build --platform linux/amd64 -t libcharm-dev ."
+alias dbuild="docker buildx build --platform linux/amd64 -f Dockerfile.ci -t libcharm-dev ."
 alias scons="docker run --platform linux/amd64 --rm -it -v $(pwd):/src libcharm-dev scons"
 alias run="docker run --platform linux/amd64 --rm -it -v $(pwd):/src libcharm-dev"
 ```
