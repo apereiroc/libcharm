@@ -305,6 +305,7 @@ env.Library(
 test_source_files = [f for f in glob.glob(f"{test_src_dir}/*.c")]
 
 # for each testing source file, create an executable at test output directory
+test_binary_files = []
 for src_file in test_source_files:
     src_name, _ = os.path.splitext(os.path.basename(src_file))
     obj_name = os.path.join(test_output_dir, src_name + ".o")
@@ -318,3 +319,30 @@ for src_file in test_source_files:
         LIBS=["charm", test_lib_name],
         LIBPATH=[output_dir, test_output_dir],
     )
+    test_binary_files.append(bin_name)
+
+
+# add a 'test' target that runs all test binaries
+def run_tests(target, source, env):
+    print("\nRunning tests...\n")
+    failures = 0
+    for test_bin in test_binary_files:
+        result = os.system(test_bin)
+        if result != 0:
+            failures += 1
+
+    if failures > 0:
+        print(f"\n{failures} test(s) failed.")
+        return 1
+
+    print("\nAll tests passed!")
+    return 0
+
+
+# create a test target
+# can be called by running `scons test`
+test_target = env.Alias("test", test_binary_files, run_tests)
+
+# always build this target
+# otherwise it will say that it is already built
+env.AlwaysBuild(test_target)

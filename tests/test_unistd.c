@@ -7,8 +7,7 @@ static inline void test_write(void) {
 }
 
 int main(void) {
-  test_write();
+  TEST_FUNCTION(test_write);
 
-  print_success();
   return 0;
 }

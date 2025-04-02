@@ -1,42 +1,78 @@
 #include "testing_lib.h"
 #include "syscall.h"
 
-// it is assumed that all of the functions used here work perfectly :-)
+// length of the char buffer used when converting ints to strings
+// this should be enough for any 32-bit integer
+// 10 digits + 1 sign + null terminator
+#define BUFLEN_FOR_INTS 12
 
-// basic write
+// length of the buffer to be sent to stderr
+// when one of the tests fails
+// will store `Failed: assertion failed at xxx: with msg xxx`
+#define BUFLEN_ASRT_FAIL 256
+
+/*
+ * Utils
+ * It is assumed that all of the util functions used here work perfectly :-)
+ * so they will not be tested
+ */
+
+// colours
+
+// hex colour #E82424 → RGB(232, 36, 36)
+#define RED_COLOUR "\033[38;2;232;36;36m"
+// hex colour #76946A: RGB(118, 148, 106)
+#define GREEN_COLOUR "\033[38;2;118;148;106m"
+// hex colour #FF9E3B: RGB(255, 211, 60)
+#define YELLOW_COLOUR "\033[38;2;255;211;60m"
+// hex colour #A3D4D5:  RGB(163, 228, 229)
+#define LIGHT_BLUE_COLOUR "\033[38;2;163;228;229m"
+// reset
+#define RESET_COLOUR "\033[0m"
+
+// string wrappers
+#define wrap_str_in_red(msg) RED_COLOUR msg RESET_COLOUR
+#define wrap_str_in_green(msg) GREEN_COLOUR msg RESET_COLOUR
+#define wrap_str_in_yellow(msg) YELLOW_COLOUR msg RESET_COLOUR
+#define wrap_str_in_light_blue(msg) LIGHT_BLUE_COLOUR msg RESET_COLOUR
+
+// private libc-like functions
+
+// basic write syscall
 static inline long __write(int fd, const void *buf, long count) {
   return syscall3(SYS_write, fd, (long)buf, count);
 }
 
-// basic exit
+// basic exit syscall
 static inline void __exit(int status) {
   syscall1(SYS_exit, status);
   __builtin_unreachable();
 }
 
-// basic strlen
-// static inline long __str_len(const char *str) {
-//   long len = 0;
-//   while (*str != '\0') {
-//     len++;
-//     str++;
-//   }
-//
-//   return len;
-// }
+// basic strlen function
+static inline long __strlen(const char *str) {
+  long len = 0;
+  while (*str != '\0') {
+    len++;
+    str++;
+  }
 
-// basic itoa
-// converts integer to null-terminated string
+  return len;
+}
+
+// basic itoa (int to null-terminated string)
 static inline void __itoa(int num, char *outbuf) {
-  // this should be enough for any 32-bit integer
-  // 10 digits + 1 sign + null terminator
-  char temp[12];
+  char temp[BUFLEN_FOR_INTS];
   int i = 0, j = 0;
   if (num == 0) {
     outbuf[j++] = '0';
   } else {
     while (num > 0) {
-      temp[i++] = '0' + (num % 10);
+      // '0' is the root of digits
+      // '0' + i = 'i'
+      // so, the last digit of num is pushed at the end of temp
+      // num is eventually set to 0 when is < 10 and is divided by 10
+      temp[i++] = '0' + (char)(num % 10);
       num /= 10;
     }
     while (i > 0) {
@@ -44,40 +80,85 @@ static inline void __itoa(int num, char *outbuf) {
       outbuf[j++] = temp[--i];
     }
   }
+  // append null terminator
   outbuf[j] = '\0';
 }
 
-void print_success(void) { __write(1, "All tests passed\n", 17); }
+static void __fill_buf_with_str(char *dest_buf, long *buf_idx,
+                                const char *from_str) {
+  while (*from_str != '\0') {
+    // protect against dest_buf overflow
+    if (*buf_idx == BUFLEN_ASRT_FAIL) {
+      const char *err_msg =
+          wrap_str_in_red("\nERROR: buffer overflow. ") "`BUFLEN_ASRT_FAIL` "
+                                                        "has been exceeded\n";
+      __write(2, err_msg, __strlen(err_msg));
+      __exit(1);
+    }
+    dest_buf[(*buf_idx)++] = *from_str++;
+  }
+}
 
-void __report_error(const char *file, int line, const char *msg) {
-  // buffer to be sent to stderr
-  // are 256 bytes enough?
-  // can eventually add checks against buf_idx...
-  char buf[256];
+static void __build_assert_fail_message(char *buf, long *buf_idx,
+                                        const char *asrt_type, const char *file,
+                                        int line, const char *msg) {
 
-  // 12 bytes should be enough for 32-bit integers
-  char line_num_buf[12];
+  // buffer to store a 32-bit integer
+  char line_num_buf[BUFLEN_FOR_INTS];
 
   // convert line number into a null-terminated string
   __itoa(line, line_num_buf);
 
-  long buf_idx = 0;
+  // print failure message
+  __fill_buf_with_str(buf, buf_idx, wrap_str_in_red("FAILED\n"));
+  __fill_buf_with_str(buf, buf_idx, "  assertion ");
+  __fill_buf_with_str(buf, buf_idx, asrt_type);
+  __fill_buf_with_str(buf, buf_idx, " failed at ");
+
   // copy file into output buffer
-  while (*file)
-    buf[buf_idx++] = *file++;
-  buf[buf_idx++] = ':';
+  __fill_buf_with_str(buf, buf_idx, YELLOW_COLOUR);
+  __fill_buf_with_str(buf, buf_idx, file);
+  __fill_buf_with_str(buf, buf_idx, ":");
 
   // copy line number where error occurred
-  const char *lptr = line_num_buf;
-  while (*lptr)
-    buf[buf_idx++] = *lptr++;
-  buf[buf_idx++] = ':';
-  buf[buf_idx++] = ' ';
+  __fill_buf_with_str(buf, buf_idx, line_num_buf);
+  __fill_buf_with_str(buf, buf_idx, RESET_COLOUR);
+  __fill_buf_with_str(buf, buf_idx, " with message: `");
 
   // copy error message
-  while (*msg)
-    buf[buf_idx++] = *msg++;
-  buf[buf_idx++] = '\n';
+  __fill_buf_with_str(buf, buf_idx, YELLOW_COLOUR);
+  __fill_buf_with_str(buf, buf_idx, msg);
+  __fill_buf_with_str(buf, buf_idx, RESET_COLOUR);
+  __fill_buf_with_str(buf, buf_idx, "`\n");
+}
+
+/*
+ * Implementations
+ */
+
+void __log_running_test_function(const char *func_name) {
+  const char *buf = "Running tests in `";
+
+  // write to stdout
+  __write(1, buf, __strlen(buf));
+  __write(1, func_name, __strlen(func_name));
+  __write(1, "`: ... ", 6);
+}
+
+void __test_ok(void) {
+  const char *buf = wrap_str_in_green("ok\n");
+
+  // write to stdout
+  __write(1, buf, __strlen(buf));
+}
+
+void __assertion_bool_failed(const char *file, int line, const char *msg) {
+  // buffer to be sent to stderr
+  char buf[BUFLEN_ASRT_FAIL];
+  long buf_idx = 0;
+
+  // build message
+  __build_assert_fail_message(buf, &buf_idx, "", file, line, msg);
 
   // write buffer to stderr
   __write(2, buf, buf_idx);
@@ -86,21 +167,31 @@ void __report_error(const char *file, int line, const char *msg) {
   __exit(1);
 }
 
-// void assert_true(int condition, const char *msg) {
-//   if (!condition) {
-//     long msg_len = __str_len(msg);
-//
-//     __write(2, "Test failed: ", 13);
-//     __write(2, msg, msg_len);
-//     __write(2, "\n", 1);
-//     __write(2, "Line: ", 6);
-//     char linebuf[12];
-//     __itoa(__LINE__, linebuf);
-//     __write(2, linebuf, 12);
-//     __exit(1);
-//   }
-// }
-//
-// void assert_false(int condition, const char *msg) {
-//   assert_true(!condition, msg);
-// }
+void __assertion_left_right_failed(const char *file, int line, const char *left,
+                                   const char *right, const char *msg) {
+  // buffer to be sent to stderr
+  char buf[BUFLEN_ASRT_FAIL];
+  long buf_idx = 0;
+
+  // build message
+  __build_assert_fail_message(buf, &buf_idx, "`left == right`", file, line,
+                              msg);
+
+  // build left == right test info
+  // assertion `left == right` failed
+  // left: 0
+  // right: 1
+  __fill_buf_with_str(buf, &buf_idx, "\n");
+  __fill_buf_with_str(buf, &buf_idx, "  left: ");
+  __fill_buf_with_str(buf, &buf_idx, left);
+  __fill_buf_with_str(buf, &buf_idx, "\n");
+  __fill_buf_with_str(buf, &buf_idx, "  right: ");
+  __fill_buf_with_str(buf, &buf_idx, right);
+  __fill_buf_with_str(buf, &buf_idx, "\n");
+
+  // write buffer to stderr
+  __write(2, buf, buf_idx);
+
+  // exit with code 1
+  __exit(1);
+}
