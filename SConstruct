@@ -5,11 +5,10 @@ from SCons.Script import Environment, AddOption, GetOption
 
 
 # check whether system is Linux/Darwin
-system_name = platform.system()
+system_name = platform.system().lower()
 
-if system_name not in ["Linux", "Darwin"]:
+if system_name not in ["linux", "darwin"]:
     print(f"System name `{system_name}` is not supported")
-    print("Please use `x86_64`, `arm64`, or `aarch64`")
     exit(1)
 
 # check whether arch is x86_64, arm64, aarch64
@@ -29,7 +28,7 @@ AddOption(
     type="string",
     nargs=1,
     action="store",
-    default="gcc" if platform.system() == "Linux" else "clang",
+    default="gcc" if system_name == "linux" else "clang",
     help="Choose the compiler: `gcc` or `clang` (default: auto-detected)",
 )
 
@@ -248,7 +247,6 @@ source_files = (
         "src/**/*.S",
         recursive=True,
     )
-    # + ["start.S"]
     + [f"crt/{system_name}/{arch_name}/crt0.S"]
 )
 
