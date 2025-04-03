@@ -28,12 +28,14 @@ jobs:
           docker buildx create --use
           docker buildx build --platform=${{ matrix.arch }} -f Dockerfile.ci -t libcharm-ci --load .
 
-      - name: Build libcharm 
+      - name: Build libcharm and run main executable
         run: |
           docker run --rm --platform=${{ matrix.arch }} -t libcharm-ci sh -c 'scons --build=debug --compiler=gcc'
           docker run --rm --platform=${{ matrix.arch }} -t libcharm-ci sh -c 'scons --build=release --compiler=gcc'
           docker run --rm --platform=${{ matrix.arch }} -t libcharm-ci sh -c 'scons --build=debug --compiler=clang'
           docker run --rm --platform=${{ matrix.arch }} -t libcharm-ci sh -c 'scons --build=release --compiler=clang'
+          docker run --rm --platform=${{ matrix.arch }} -t libcharm-ci sh -c 'scons run --build=release'
+
 
       - name: Run libcharm tests
         run: |
