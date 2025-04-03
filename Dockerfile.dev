@@ -10,6 +10,7 @@ RUN apt update && apt install -y \
   clang \
   gcc \
   scons \
+  make \
   # ausyscall --dump shows syscall numbers
   auditd \
   # linux/posix programmer manuals

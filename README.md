@@ -22,6 +22,13 @@ Run the executable generated at the build folder
 
 where `build-opts` is a folder constructed with the information passed to the construction tool, namely `{os}-{architecture}-{compiler}-{optimisation}`. For example, on macOS with Intel chip the executable is determined to be at `./darwin-x86_64-clang-debug/main`. On the other hand, optimised compilation on Linux/arm64 is at `./target/linux-arm64-gcc-release/main`
 
+You can also run the executable through the build system
+
+```bash
+scons -Q run
+```
+
+
 ### Build options
 
 The build system accepts optimisation mode (only `debug` and `release` are supported) and compiler selection (only `gcc` and `clang` are supported). The default for the build type is `debug`, while the compiler default is autodetected (`gcc` for Linux and `clang` for macOS).
