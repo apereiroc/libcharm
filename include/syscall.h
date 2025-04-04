@@ -1,8 +1,5 @@
 #pragma once
 
-extern long __syscall_wrapper(long number, long arg1, long arg2, long arg3,
-                              long arg4, long arg5, long arg6);
-
 long syscall0(long number);
 long syscall1(long number, long arg1);
 long syscall2(long number, long arg1, long arg2);
