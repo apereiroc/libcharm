@@ -1,4 +1,4 @@
-#include "syscall.h"
+#include <syscall.h>
 
 #if defined(__x86_64__)
 

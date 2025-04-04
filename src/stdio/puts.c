@@ -1,5 +1,5 @@
-#include "stdio.h"
-#include "unistd.h"
+#include <stdio.h>
+#include <unistd.h>
 
 int puts(const char *s) {
   if (!s)
@@ -8,6 +8,7 @@ int puts(const char *s) {
   // size_t len = strlen(s);
 
   // TODO: define eof
+  // TODO: check test if this is changed
   const int eof = -1;
 
   // provisional meanwhile i don't have memcpy
