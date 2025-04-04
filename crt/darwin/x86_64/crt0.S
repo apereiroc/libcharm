@@ -9,6 +9,7 @@
   *       return val: rax
   *   syscalls:
   *       args: rdi, rsi, rdx, r10, r8, r9
+  *       syscall number: rax
   *       return val: rax
   *
   * Stack grows downwards:
