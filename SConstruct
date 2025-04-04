@@ -238,17 +238,10 @@ env.CompilationDatabase()
 
 
 # get source files
-source_files = (
-    glob.glob(
-        "src/**/*.c",
-        recursive=True,
-    )
-    + glob.glob(
-        "src/**/*.S",
-        recursive=True,
-    )
-    + [f"crt/{system_name}/{arch_name}/crt0.S"]
-)
+source_files = glob.glob(
+    "src/**/*.c",
+    recursive=True,
+) + [f"crt/{system_name}/{arch_name}/crt0.S"]
 
 # create object files at output directory
 obj_files = []
@@ -315,7 +308,6 @@ env.Library(
     [
         os.path.join(test_output_dir, "testing_lib.o"),
         os.path.join(output_dir, "syscall.o"),
-        os.path.join(output_dir, "syscall_wrapper.o"),
     ],
 )
 
