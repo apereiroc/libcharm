@@ -14,7 +14,13 @@ The project is, for now, built with `SCons`. If you have this build system insta
 scons
 ```
 
-Run the executable generated at the build folder
+The main executable can be run through the build system
+
+```bash
+scons -Q run
+```
+
+Alternatively, you can run the executable generated at the build folder
 
 ```bash
 ./target/{build-opts}/main
@@ -22,20 +28,25 @@ Run the executable generated at the build folder
 
 where `build-opts` is a folder constructed with the information passed to the construction tool, namely `{os}-{architecture}-{compiler}-{optimisation}`. For example, on macOS with Intel chip the executable is determined to be at `./darwin-x86_64-clang-debug/main`. On the other hand, optimised compilation on Linux/arm64 is at `./target/linux-arm64-gcc-release/main`
 
-You can also run the executable through the build system
+### Tests
+
+The project relies heavily on unit tests. Otherwise, it would have failed long ago.
+These can be run through the build system
+
 
 ```bash
-scons -Q run
+scons -Q test
 ```
-
 
 ### Build options
 
 The build system accepts optimisation mode (only `debug` and `release` are supported) and compiler selection (only `gcc` and `clang` are supported). The default for the build type is `debug`, while the compiler default is autodetected (`gcc` for Linux and `clang` for macOS).
 
 ```bash
-scons --build=<{debug,release}> --compiler=<{gcc,clang}>
+scons --build=<{debug,release}> --compiler=<{gcc,clang}> <target>
 ```
+
+where `target` can be `run`, `test`, or any specific target from the source (object files, libraries, tests, ...).
 
 ## Build and run in a Docker container
 
@@ -66,7 +77,7 @@ docker run --rm -it -v $(pwd):/src -t libcharm scons test
 ## Aliases for quick development
 
 ```bash
-alias dbuild="docker buildx build --platform linux/amd64 -f Dockerfile.ci -t libcharm-dev ."
+alias build="docker buildx build --platform linux/amd64 -f Dockerfile.ci -t libcharm-dev ."
 alias scons="docker run --platform linux/amd64 --rm -it -v $(pwd):/src libcharm-dev scons"
 alias run="docker run --platform linux/amd64 --rm -it -v $(pwd):/src libcharm-dev"
 ```
@@ -75,7 +86,7 @@ alias run="docker run --platform linux/amd64 --rm -it -v $(pwd):/src libcharm-de
 
 ## Testing lib
 - [x] add testing framework
-- [ ] provide tests for implemented functions
+- [x] provide tests for implemented functions
 
 ## Implement C runtime
 - ... more todos
@@ -419,7 +430,7 @@ alias run="docker run --platform linux/amd64 --rm -it -v $(pwd):/src libcharm-de
 - [ ] `putchar` (unimplemented, untested)
 - [ ] `putc_unlocked` (unimplemented, untested)
 - [ ] `putchar_unlocked` (unimplemented, untested)
-- [x] `puts` (implemented, untested)
+- [x] `puts` (implemented, tested)
 - [ ] `remove` (unimplemented, untested)
 - [ ] `rename` (unimplemented, untested)
 - [ ] `renameat` (unimplemented, untested)
@@ -459,7 +470,7 @@ alias run="docker run --platform linux/amd64 --rm -it -v $(pwd):/src libcharm-de
 ## String handling (`string.h`)
 - [ ] `memchr` (unimplemented, untested)
 - [ ] `memcmp` (unimplemented, untested)
-- [ ] `memcpy` (unimplemented, untested)
+- [x] `memcpy` (implemented, tested)
 - [ ] `memmove` (unimplemented, untested)
 - [ ] `memset` (unimplemented, untested)
 - [ ] `strcat` (unimplemented, untested)
