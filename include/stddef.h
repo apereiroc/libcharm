@@ -1,6 +1,6 @@
 #pragma once
 
-#include "stdint.h"
+#include <stdint.h>
 
 #if defined(__x86_64__) || defined(__aarch64__)
 typedef uint64_t size_t;
